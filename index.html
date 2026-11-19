@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dag — Tu plata, tus metas 🚀</title>
+  <!-- Favicon SVG con el logo circular dorado y signo '$' -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FFF0A8'/%3E%3Cstop offset='45%25' stop-color='%23D49A2A'/%3E%3Cstop offset='100%25' stop-color='%238A5A0B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='60' cy='60' r='56' fill='url(%23g)'/%3E%3Ccircle cx='60' cy='60' r='47' fill='%230D0E12' stroke='url(%23g)' stroke-width='3'/%3E%3Ctext x='60' y='83' text-anchor='middle' font-family='Inter,Arial,sans-serif' font-weight='800' font-size='64' fill='url(%23g)'%3E%24%3C/text%3E%3C/svg%3E" />
+  <!-- Meta tags PWA para instalar en Android / iOS -->
+  <meta name="theme-color" content="#C68B24" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Dag" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fuente Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            dag: {
+              bg: '#FBF4E2',
+              bgSoft: '#FFFDF7',
+              blue: '#C68B24',
+              blueDark: '#9A6712',
+              blueLight: '#FEF6E4',
+              peach: '#f69d5c',
+              peachBg: '#FFF3E0',
+              peachBorder: '#f69d5c',
+              peachText: '#9A5B13',
+              pink: '#EC4899',
+              emerald: '#10B981',
+              goldLight: '#FDE68A',
+              goldMid: '#D49A2A',
+              goldDark: '#8A5A0B',
+            }
+          },
+          boxShadow: {
+            'card': '0 4px 20px -2px rgba(120, 82, 18, 0.06), 0 1px 3px 0 rgba(120, 82, 18, 0.03)',
+            'blue-glow': '0 10px 25px -5px rgba(180, 125, 28, 0.34)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Fondo dorado elegante con degradado suave oro/crema cálido */
+    body {
+      background:
+        radial-gradient(circle at 12% 8%, rgba(250, 204, 21, 0.22) 0%, transparent 42%),
+        radial-gradient(circle at 88% 15%, rgba(217, 119, 6, 0.14) 0%, transparent 45%),
+        linear-gradient(160deg, #FDF7E7 0%, #F7EAD0 52%, #F2E1BE 100%);
+      background-attachment: fixed;
+      color: #1E1608;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Gradiente metálico dorado elegante para la tarjeta destacada */
+    .dag-gradient-card {
+      background: linear-gradient(135deg, #D99B26 0%, #B87B14 48%, #8E5B0A 100%);
+      border: 1px solid rgba(254, 240, 138, 0.45);
+    }
+
+    /* Animaciones suaves */
+    .fade-in {
+      animation: fadeIn 0.25s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Ocultar flechas en inputs numéricos */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Scrollbar limpio */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F7EAD0;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D4A853;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #B4842A;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Definición reusable del logotipo circular metálico dorado con signo '$' -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="hidden" aria-hidden="true">
+    <defs>
+      <linearGradient id="dagGoldOuterGrad" x1="10%" y1="5%" x2="90%" y2="95%">
+        <stop offset="0%" stop-color="#FFF3B0" />
+        <stop offset="22%" stop-color="#E5B342" />
+        <stop offset="52%" stop-color="#B87D16" />
+        <stop offset="78%" stop-color="#F7DC79" />
+        <stop offset="100%" stop-color="#7C4E07" />
+      </linearGradient>
+      <radialGradient id="dagGoldCenterGrad" cx="45%" cy="38%" r="65%">
+        <stop offset="0%" stop-color="#1E2028" />
+        <stop offset="65%" stop-color="#0D0E12" />
+        <stop offset="100%" stop-color="#050608" />
+      </radialGradient>
+      <linearGradient id="dagGoldSignGrad" x1="15%" y1="10%" x2="85%" y2="90%">
+        <stop offset="0%" stop-color="#FFF5BD" />
+        <stop offset="35%" stop-color="#EAB948" />
+        <stop offset="68%" stop-color="#BA7E17" />
+        <stop offset="100%" stop-color="#FFE688" />
+      </linearGradient>
+      <linearGradient id="dagGoldShineSweep" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.65" />
+        <stop offset="45%" stop-color="#FDE68A" stop-opacity="0.12" />
+        <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+
+    <symbol id="dag-coin-logo" viewBox="0 0 120 120">
+      <!-- Sombra y anillo metálico exterior -->
+      <circle cx="60" cy="60" r="57" fill="url(#dagGoldOuterGrad)" />
+      <circle cx="60" cy="60" r="52.5" fill="none" stroke="#FFF4B8" stroke-opacity="0.55" stroke-width="1.2" />
+      <!-- Centro oscuro metálico -->
+      <circle cx="60" cy="60" r="47" fill="url(#dagGoldCenterGrad)" />
+      <!-- Doble anillo dorado interior -->
+      <circle cx="60" cy="60" r="45.5" fill="none" stroke="url(#dagGoldOuterGrad)" stroke-width="2.6" />
+      <circle cx="60" cy="60" r="40.8" fill="none" stroke="#E5B342" stroke-opacity="0.45" stroke-width="1.1" />
+      <!-- Signo '$' metálico dorado biselado -->
+      <text
+        x="60"
+        y="83"
+        text-anchor="middle"
+        font-family="Inter, system-ui, -apple-system, sans-serif"
+        font-weight="800"
+        font-size="64"
+        fill="url(#dagGoldSignGrad)"
+        stroke="#7A4B06"
+        stroke-width="1.4"
+      >$</text>
+      <!-- Brillo metálico diagonal sutil -->
+      <path d="M 18 28 A 48 48 0 0 1 88 18 L 32 92 A 48 48 0 0 1 18 28 Z" fill="url(#dagGoldShineSweep)" pointer-events="none" />
+    </symbol>
+  </svg>
+
+  <!-- Toast / Notificación flotante (sin alert()) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Modal para crear/aportar meta o confirmar reinicio -->
+  <div id="modal-backdrop" class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-40 hidden items-center justify-center p-4">
+    <div id="modal-content" class="bg-white rounded-[20px] border border-slate-200 shadow-xl max-w-md w-full p-6 fade-in">
+      <!-- Contenido dinámico del modal -->
+    </div>
+  </div>
+
+  <!-- HEADER SUPERIOR -->
+  <header class="bg-[#FFFDF7]/92 backdrop-blur-md border-b border-amber-900/12 sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <!-- Logo y Marca -->
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 shadow-md ring-2 ring-amber-400/40 bg-[#0D0E12]">
+          <svg class="w-12 h-12" role="img" aria-label="Logo metálico dorado de Dag">
+            <use href="#dag-coin-logo"></use>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-extrabold text-slate-900 tracking-tight leading-none">Dag</h1>
+            <span class="text-[11px] font-bold bg-amber-100/90 text-[#8A5A0B] border border-amber-400/60 px-2 py-0.5 rounded-full">50/30/20</span>
+          </div>
+          <p class="text-xs sm:text-sm text-amber-950/70 font-medium mt-0.5">Tu plata, tus metas 🚀</p>
+        </div>
+      </div>
+
+      <!-- Selector de Navegación (Tabs principales) -->
+      <nav class="flex items-center bg-[#F6E8C8] p-1 rounded-2xl border border-amber-900/15 order-3 sm:order-2 w-full sm:w-auto justify-center">
+        <button
+          id="tab-btn-calc"
+          onclick="switchView('calc')"
+          class="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-1.5 bg-white text-[#9A6712] shadow-xs cursor-pointer"
+        >
+          <span>🧮</span>
+          <span>Calculadora 50/30/20</span>
+        </button>
+        <button
+          id="tab-btn-tracker"
+          onclick="switchView('tracker')"
+          class="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-1.5 text-amber-950/75 hover:text-slate-900 cursor-pointer"
+        >
+          <span>📊</span>
+          <span>Gestor de gastos</span>
+        </button>
+      </nav>
+
+      <!-- Acciones rápidas (Datos de ejemplo / Reiniciar) -->
+      <div class="flex items-center gap-2 order-2 sm:order-3">
+        <button
+          onclick="loadExampleData()"
+          title="Cargar el ejemplo de $1.500.000"
+          class="text-xs font-bold px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200/80 text-[#8A5A0B] border border-amber-400/50 transition-colors cursor-pointer"
+        >
+          ✨ Ejemplo $1.5M
+        </button>
+        <button
+          onclick="openResetModal()"
+          title="Borrar todos los datos y empezar de cero"
+          class="text-xs font-semibold px-3 py-2 rounded-xl bg-[#F7EBD2] hover:bg-[#EFE0C0] text-amber-950/80 border border-amber-900/10 transition-colors cursor-pointer"
+        >
+          Reiniciar
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+    <!-- ========================================================= -->
+    <!-- VISTA 1: CALCULADORA 50/30/20                             -->
+    <!-- ========================================================= -->
+    <section id="view-calc" class="space-y-6 fade-in">
+      <!-- Banner superior -->
+      <div class="bg-[#FFFDF7] rounded-[18px] border border-amber-900/12 px-5 py-4 shadow-card flex items-start sm:items-center gap-3.5">
+        <div class="w-10 h-10 rounded-full bg-[#0D0E12] flex items-center justify-center shrink-0 mt-0.5 sm:mt-0 shadow-xs ring-1 ring-amber-400/50">
+          <svg class="w-9 h-9" aria-hidden="true">
+            <use href="#dag-coin-logo"></use>
+          </svg>
+        </div>
+        <p class="text-sm sm:text-[15px] text-slate-700 leading-relaxed">
+          <span class="font-semibold text-slate-900">La idea en una frase:</span> dividí lo que te entra en tres partes y decidí a dónde va tu plata <strong class="font-bold text-slate-900 underline decoration-[#C68B24] decoration-2 underline-offset-2">antes</strong> de gastarla.
+        </p>
+      </div>
+
+      <!-- Tarjeta Principal: Tu calculadora 50/30/20 -->
+      <div class="bg-[#FFFDF7] rounded-[20px] border border-amber-900/12 p-5 sm:p-8 shadow-card">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
+          <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 flex items-center gap-2">
+            <span>🧮</span>
+            <span>Tu calculadora <span id="calc-title-ratio">50/30/20</span></span>
+          </h2>
+          <span class="text-xs font-medium text-amber-900/60">Calculado en tiempo real</span>
+        </div>
+
+        <!-- Input: ¿Cuánto te entra por mes? -->
+        <div class="mb-6">
+          <label for="calc-income-input" class="block text-sm font-semibold text-slate-700 mb-2">
+            ¿Cuánto te entra por mes?
+          </label>
+          <div class="relative flex items-center">
+            <span class="absolute left-4 text-2xl sm:text-3xl font-extrabold text-[#B87D16] select-none">$</span>
+            <input
+              id="calc-income-input"
+              type="text"
+              inputmode="numeric"
+              value="1.500.000"
+              oninput="handleCalcIncomeInput(this)"
+              class="w-full pl-11 pr-4 py-3.5 sm:py-4 text-2xl sm:text-3xl font-extrabold text-slate-900 bg-white rounded-2xl border-2 border-[#C68B24] focus:outline-none focus:ring-4 focus:ring-[#C68B24]/20 transition-all"
+              placeholder="0"
+            />
+          </div>
+
+          <!-- Enlace interactivo: Usar lo que me entró este mes -->
+          <div class="mt-2.5 flex flex-wrap items-center justify-between gap-2">
+            <button
+              type="button"
+              onclick="useMonthlyIncomeInCalc()"
+              class="text-xs sm:text-sm font-bold text-[#9A6712] hover:text-[#784E08] underline decoration-amber-400 hover:decoration-[#9A6712] underline-offset-4 transition-colors cursor-pointer text-left"
+            >
+              Usar lo que me entró este mes (<span id="calc-real-income-hint">$ 1.500.000</span>)
+            </button>
+            <span class="text-xs text-slate-400">Podés editar el número directo arriba</span>
+          </div>
+        </div>
+
+        <!-- Selector: Elegí tu reparto -->
+        <div class="mb-7">
+          <div class="flex items-center justify-between mb-2.5">
+            <span class="text-sm font-semibold text-slate-700">Elegí tu reparto</span>
+            <button
+              type="button"
+              onclick="toggleCustomRatioPanel()"
+              class="text-xs font-semibold text-amber-900/70 hover:text-[#9A6712] transition-colors cursor-pointer"
+            >
+              ⚙️ Personalizar %
+            </button>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2.5 sm:gap-3.5">
+            <button
+              type="button"
+              id="ratio-btn-50-30-20"
+              onclick="selectRatioPreset(50, 30, 20, '50-30-20')"
+              class="ratio-pill py-3 px-3 rounded-2xl font-bold text-sm sm:text-base transition-all cursor-pointer border-2 bg-[#FFF3E0] border-[#f69d5c] text-[#9A5B13] shadow-xs"
+            >
+              50/30/20
+            </button>
+            <button
+              type="button"
+              id="ratio-btn-60-30-10"
+              onclick="selectRatioPreset(60, 30, 10, '60-30-10')"
+              class="ratio-pill py-3 px-3 rounded-2xl font-bold text-sm sm:text-base transition-all cursor-pointer border border-amber-900/15 bg-white text-slate-700 hover:bg-amber-50/70"
+            >
+              60/30/10
+            </button>
+            <button
+              type="button"
+              id="ratio-btn-70-20-10"
+              onclick="selectRatioPreset(70, 20, 10, '70-20-10')"
+              class="ratio-pill py-3 px-3 rounded-2xl font-bold text-sm sm:text-base transition-all cursor-pointer border border-amber-900/15 bg-white text-slate-700 hover:bg-amber-50/70"
+            >
+              70/20/10
+            </button>
+          </div>
+
+          <!-- Panel opcional de porcentajes personalizados -->
+          <div id="custom-ratio-panel" class="hidden mt-3 p-4 rounded-2xl bg-[#FBF4E2] border border-amber-900/15">
+            <div class="grid grid-cols-3 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Necesidades %</label>
+                <input id="custom-needs" type="number" min="0" max="100" value="50" oninput="applyCustomRatios()" class="w-full px-3 py-2 rounded-xl border border-amber-900/20 bg-white font-bold text-sm text-slate-800 focus:border-[#C68B24] focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Gustos %</label>
+                <input id="custom-wants" type="number" min="0" max="100" value="30" oninput="applyCustomRatios()" class="w-full px-3 py-2 rounded-xl border border-amber-900/20 bg-white font-bold text-sm text-slate-800 focus:border-[#EC4899] focus:outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Ahorro %</label>
+                <input id="custom-savings" type="number" min="0" max="100" value="20" oninput="applyCustomRatios()" class="w-full px-3 py-2 rounded-xl border border-amber-900/20 bg-white font-bold text-sm text-slate-800 focus:border-[#10B981] focus:outline-none" />
+              </div>
+            </div>
+            <p id="custom-ratio-warning" class="text-xs font-medium text-slate-500 mt-2">
+              La suma actual es <strong id="custom-ratio-sum" class="text-slate-800">100%</strong> (ideal: 100%).
+            </p>
+          </div>
+        </div>
+
+        <!-- Desglose Visual en Tiempo Real -->
+        <div class="divide-y divide-amber-900/10 border-t border-amber-900/10">
+          <!-- Fila 1: Necesidades -->
+          <div class="py-4 sm:py-5 flex items-center justify-between gap-4">
+            <div class="flex items-start gap-3.5 min-w-0 flex-1">
+              <div class="w-11 h-11 rounded-2xl bg-amber-50 border border-amber-300/60 flex items-center justify-center text-xl shrink-0">
+                🏠
+              </div>
+              <div class="min-w-0 flex-1">
+                <h3 class="font-bold text-slate-900 text-base sm:text-lg leading-tight">Necesidades</h3>
+                <p class="text-xs sm:text-sm text-slate-500 truncate mt-0.5">
+                  Casa, Súper, Servicios, Transporte, Salud, Celular
+                </p>
+                <!-- Barra dorada/ámbar -->
+                <div class="w-full max-w-xs bg-amber-100 h-2.5 rounded-full overflow-hidden mt-2.5">
+                  <div id="bar-needs" class="bg-[#C68B24] h-full rounded-full transition-all duration-300" style="width: 50%"></div>
+                </div>
+              </div>
+            </div>
+            <div class="text-right shrink-0">
+              <div id="amount-needs" class="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight">$ 750.000</div>
+              <div id="pct-needs" class="text-xs sm:text-sm font-semibold text-slate-400 mt-0.5">50%</div>
+            </div>
+          </div>
+
+          <!-- Fila 2: Gustos -->
+          <div class="py-4 sm:py-5 flex items-center justify-between gap-4">
+            <div class="flex items-start gap-3.5 min-w-0 flex-1">
+              <div class="w-11 h-11 rounded-2xl bg-pink-50 border border-pink-100 flex items-center justify-center text-xl shrink-0">
+                🎉
+              </div>
+              <div class="min-w-0 flex-1">
+                <h3 class="font-bold text-slate-900 text-base sm:text-lg leading-tight">Gustos</h3>
+                <p class="text-xs sm:text-sm text-slate-500 truncate mt-0.5">
+                  Salidas, Delivery, Cafecito, Ropa, Streaming, Viajes
+                </p>
+                <!-- Barra rosa/fucsia -->
+                <div class="w-full max-w-xs bg-amber-100 h-2.5 rounded-full overflow-hidden mt-2.5">
+                  <div id="bar-wants" class="bg-[#EC4899] h-full rounded-full transition-all duration-300" style="width: 30%"></div>
+                </div>
+              </div>
+            </div>
+            <div class="text-right shrink-0">
+              <div id="amount-wants" class="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight">$ 450.000</div>
+              <div id="pct-wants" class="text-xs sm:text-sm font-semibold text-slate-400 mt-0.5">30%</div>
+            </div>
+          </div>
+
+          <!-- Fila 3: Ahorro e inversión -->
+          <div class="pt-4 sm:pt-5 flex items-center justify-between gap-4">
+            <div class="flex items-start gap-3.5 min-w-0 flex-1">
+              <div class="w-11 h-11 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-xl shrink-0">
+                🐷
+              </div>
+              <div class="min-w-0 flex-1">
+                <h3 class="font-bold text-slate-900 text-base sm:text-lg leading-tight">Ahorro e inversión</h3>
+                <p class="text-xs sm:text-sm text-slate-500 truncate mt-0.5">
+                  Plazo fijo, Dólares, FCI, Ahorro
+                </p>
+                <!-- Barra verde esmeralda -->
+                <div class="w-full max-w-xs bg-amber-100 h-2.5 rounded-full overflow-hidden mt-2.5">
+                  <div id="bar-savings" class="bg-[#10B981] h-full rounded-full transition-all duration-300" style="width: 20%"></div>
+                </div>
+              </div>
+            </div>
+            <div class="text-right shrink-0">
+              <div id="amount-savings" class="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight">$ 300.000</div>
+              <div id="pct-savings" class="text-xs sm:text-sm font-semibold text-slate-400 mt-0.5">20%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA hacia el gestor de gastos -->
+        <div class="mt-7 pt-5 border-t border-amber-900/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p class="text-xs sm:text-sm text-slate-500 text-center sm:text-left">
+            ¿Querés controlar que tus gastos reales no se pasen de estos topes?
+          </p>
+          <button
+            type="button"
+            onclick="switchView('tracker')"
+            class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#D49A2A] to-[#A46E12] hover:from-[#C2881E] hover:to-[#8D5D0C] text-white font-semibold text-sm shadow-xs transition-all cursor-pointer flex items-center justify-center gap-2"
+          >
+            <span>Ir al Gestor de gastos</span>
+            <span>→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sección Inferior: 📊 Las tres partes -->
+      <div class="space-y-3.5">
+        <h3 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2 px-1">
+          <span>📊</span>
+          <span>Las tres partes</span>
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Tarjeta explicativa 1: Necesidades -->
+          <div class="bg-[#FFFDF7] rounded-[18px] border border-amber-900/12 p-5 shadow-card flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="inline-flex items-center gap-1.5 text-sm font-extrabold text-[#8A5A0B] bg-amber-100/80 px-3 py-1 rounded-full">
+                  <span>🏠</span>
+                  <span><span id="card-pct-needs">50%</span> Necesidades</span>
+                </span>
+                <span id="card-amt-needs" class="text-sm font-bold text-slate-800">$ 750.000</span>
+              </div>
+              <p class="text-sm font-semibold text-slate-800 mb-1.5">Lo que tenés que pagar sí o sí.</p>
+              <p class="text-xs text-slate-500 leading-relaxed">
+                Incluye alquiler o expensas, compras básicas de supermercado, luz, gas, internet, transporte público o nafta, salud y celular. Si supera este tope, conviene revisar gastos fijos.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-amber-900/10 flex items-center justify-between text-xs">
+              <span class="text-slate-400 font-medium">Límite sugerido</span>
+              <span class="font-bold text-[#9A6712]">Inamovible</span>
+            </div>
+          </div>
+
+          <!-- Tarjeta explicativa 2: Gustos -->
+          <div class="bg-[#FFFDF7] rounded-[18px] border border-amber-900/12 p-5 shadow-card flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="inline-flex items-center gap-1.5 text-sm font-extrabold text-[#EC4899] bg-pink-50 px-3 py-1 rounded-full">
+                  <span>🎉</span>
+                  <span><span id="card-pct-wants">30%</span> Gustos</span>
+                </span>
+                <span id="card-amt-wants" class="text-sm font-bold text-slate-800">$ 450.000</span>
+              </div>
+              <p class="text-sm font-semibold text-slate-800 mb-1.5">Disfrutar hoy sin culpa ni deudas.</p>
+              <p class="text-xs text-slate-500 leading-relaxed">
+                Salidas a comer, delivery, cafecito al paso, ropa, suscripciones de streaming, gimnasio o escapadas. Tener un presupuesto asignado te permite disfrutar tranquilo sabiendo tu techo.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-amber-900/10 flex items-center justify-between text-xs">
+              <span class="text-slate-400 font-medium">Flexible</span>
+              <span class="font-bold text-[#EC4899]">Ajustable mes a mes</span>
+            </div>
+          </div>
+
+          <!-- Tarjeta explicativa 3: Ahorro e inversión -->
+          <div class="bg-[#FFFDF7] rounded-[18px] border border-amber-900/12 p-5 shadow-card flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="inline-flex items-center gap-1.5 text-sm font-extrabold text-[#10B981] bg-emerald-50 px-3 py-1 rounded-full">
+                  <span>🐷</span>
+                  <span><span id="card-pct-savings">20%</span> Ahorro e inversión</span>
+                </span>
+                <span id="card-amt-savings" class="text-sm font-bold text-slate-800">$ 300.000</span>
+              </div>
+              <p class="text-sm font-semibold text-slate-800 mb-1.5">Pagate a vos primero, sin negociar.</p>
+              <p class="text-xs text-slate-500 leading-relaxed">
+                Apenas cobrás, separá este porcentaje antes de gastar en lo demás. Podés destinarlo a fondo de emergencia, dólares, FCI, plazo fijo o tus metas personales.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-amber-900/10 flex items-center justify-between text-xs">
+              <span class="text-slate-400 font-medium">Prioridad #1</span>
+              <span class="font-bold text-[#10B981]">Sin negociar</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- VISTA 2: GESTOR DE GASTOS Y MOVIMIENTOS                   -->
+    <!-- ========================================================= -->
+    <section id="view-tracker" class="hidden fade-in">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- COLUMNA IZQUIERDA (5 cols): Nuevo Movimiento -->
+        <div class="lg:col-span-5 bg-[#FFFDF7] rounded-[20px] border border-amber-900/12 p-5 sm:p-6 shadow-card">
+          <h2 class="text-lg font-extrabold text-slate-900 mb-4">Nuevo movimiento</h2>
+
+          <!-- Selector de tipo de movimiento en 3 tarjetas -->
+          <div class="grid grid-cols-3 gap-2.5 mb-5">
+            <button
+              type="button"
+              id="tx-type-expense"
+              onclick="selectTxType('expense')"
+              class="tx-type-card p-3 rounded-2xl border-2 border-[#C68B24] bg-amber-50/90 flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer"
+            >
+              <span class="text-xl">💸</span>
+              <span class="text-xs font-bold text-slate-900">Gasto</span>
+            </button>
+
+            <button
+              type="button"
+              id="tx-type-income"
+              onclick="selectTxType('income')"
+              class="tx-type-card p-3 rounded-2xl border border-amber-900/15 bg-white hover:bg-amber-50/60 flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer"
+            >
+              <span class="text-xl">💰</span>
+              <span class="text-xs font-bold text-slate-700">Ingreso</span>
+            </button>
+
+            <button
+              type="button"
+              id="tx-type-savings"
+              onclick="selectTxType('savings')"
+              class="tx-type-card p-3 rounded-2xl border border-amber-900/15 bg-white hover:bg-amber-50/60 flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer text-center"
+            >
+              <span class="text-xl">🐷</span>
+              <span class="text-[11px] leading-tight font-bold text-slate-700">Ahorro e inversión</span>
+            </button>
+          </div>
+
+          <!-- Display/Input grande para el monto -->
+          <div class="mb-4">
+            <div class="relative flex items-center bg-white rounded-2xl border border-amber-900/20 focus-within:border-[#C68B24] focus-within:ring-4 focus-within:ring-[#C68B24]/15 px-4 py-3 transition-all">
+              <span id="tx-currency-symbol" class="text-2xl sm:text-3xl font-extrabold text-[#B87D16] mr-2 select-none">$</span>
+              <input
+                id="tx-amount-input"
+                type="text"
+                inputmode="numeric"
+                placeholder="0"
+                oninput="handleTxAmountInput(this)"
+                class="w-full bg-transparent text-3xl sm:text-4xl font-extrabold text-slate-900 placeholder:text-slate-300 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <!-- Selector de moneda ($ Pesos / U$S Dólares) -->
+          <div class="grid grid-cols-2 gap-2.5 mb-5">
+            <button
+              type="button"
+              id="tx-curr-ars"
+              onclick="selectTxCurrency('ARS')"
+              class="py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-[#D49A2A] to-[#A46E12] text-white shadow-xs transition-all cursor-pointer"
+            >
+              $ Pesos
+            </button>
+            <button
+              type="button"
+              id="tx-curr-usd"
+              onclick="selectTxCurrency('USD')"
+              class="py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-600 border border-amber-900/15 hover:bg-amber-50/60 transition-all cursor-pointer"
+            >
+              U$S Dólares
+            </button>
+          </div>
+
+          <!-- Grilla "¿En qué?" con íconos en 3 columnas -->
+          <div class="mb-4">
+            <div class="flex items-center justify-between mb-2.5">
+              <label class="text-sm font-bold text-slate-800">¿En qué?</label>
+              <span id="selected-category-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100/90 text-[#8A5A0B]">
+                Súper · Necesidades
+              </span>
+            </div>
+
+            <div id="category-grid" class="grid grid-cols-3 gap-2">
+              <!-- Categorías renderizadas dinámicamente por JS -->
+            </div>
+          </div>
+
+          <!-- Nota opcional -->
+          <div class="mb-5">
+            <input
+              id="tx-note-input"
+              type="text"
+              maxlength="60"
+              placeholder="Nota opcional (ej. Compra semanal, Alquiler...)"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-amber-900/15 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#C68B24] transition-colors"
+            />
+          </div>
+
+          <!-- Botón principal dorado metálico -->
+          <button
+            type="button"
+            onclick="saveTransaction()"
+            class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-[#D49A2A] via-[#BA7E17] to-[#945F0A] hover:brightness-105 active:scale-[0.99] text-white font-bold text-sm sm:text-base shadow-blue-glow transition-all cursor-pointer flex items-center justify-center gap-2"
+          >
+            <span>Guardar movimiento</span>
+          </button>
+        </div>
+
+        <!-- COLUMNA DERECHA (7 cols): Resumen Mensual, Regla 50/30/20, Metas e Historial -->
+        <div class="lg:col-span-7 space-y-6">
+
+          <!-- TARJETA DORADA METÁLICA DESTACADA -->
+          <div class="dag-gradient-card rounded-[22px] p-5 sm:p-7 text-white shadow-blue-glow relative overflow-hidden">
+            <!-- Círculos decorativos dorados sutiles -->
+            <div class="w-48 h-48 rounded-full bg-amber-200/15 absolute -top-16 -right-12 pointer-events-none"></div>
+            <div class="w-36 h-36 rounded-full bg-black/15 absolute -bottom-12 left-8 pointer-events-none"></div>
+            <!-- Logo dorado sutil en marca de agua -->
+            <svg class="w-28 h-28 opacity-15 absolute bottom-3 right-3 pointer-events-none" aria-hidden="true">
+              <use href="#dag-coin-logo"></use>
+            </svg>
+
+            <!-- Fila superior: Selector de Mes y Tabs Pesos / Dólares -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-5 relative z-10">
+              <!-- Tabs de moneda en el dashboard -->
+              <div class="inline-flex bg-black/25 backdrop-blur-xs p-1 rounded-xl border border-amber-200/25">
+                <button
+                  type="button"
+                  id="dash-curr-ars"
+                  onclick="selectDashCurrency('ARS')"
+                  class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-white text-[#8A5A0B] shadow-xs transition-all cursor-pointer"
+                >
+                  Pesos
+                </button>
+                <button
+                  type="button"
+                  id="dash-curr-usd"
+                  onclick="selectDashCurrency('USD')"
+                  class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-amber-50/90 hover:text-white transition-all cursor-pointer"
+                >
+                  Dólares
+                </button>
+              </div>
+
+              <!-- Selector de mes -->
+              <div class="flex items-center gap-1.5 bg-black/20 backdrop-blur-xs px-3 py-1.5 rounded-xl border border-amber-200/25">
+                <button type="button" onclick="changeMonth(-1)" class="text-amber-100/90 hover:text-white px-1 font-bold cursor-pointer" title="Mes anterior">‹</button>
+                <span id="dash-month-label" class="text-xs sm:text-sm font-bold tracking-tight min-w-[115px] text-center">Noviembre de 2026</span>
+                <button type="button" onclick="changeMonth(1)" class="text-amber-100/90 hover:text-white px-1 font-bold cursor-pointer" title="Mes siguiente">›</button>
+              </div>
+            </div>
+
+            <!-- Saldo Disponible -->
+            <div class="relative z-10 mb-5 flex items-center justify-between gap-4">
+              <div>
+                <p class="text-sm font-medium text-amber-100/95 mb-1">Te queda disponible</p>
+                <div id="dash-available-amount" class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">
+                  $ 16.000
+                </div>
+              </div>
+              <div class="hidden sm:flex w-14 h-14 rounded-full bg-[#0D0E12]/90 items-center justify-center shadow-lg ring-2 ring-amber-200/50 shrink-0">
+                <svg class="w-14 h-14" aria-hidden="true">
+                  <use href="#dag-coin-logo"></use>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Barra de progreso clara con alerta -->
+            <div class="relative z-10 mb-5">
+              <div class="w-full bg-black/25 h-2.5 rounded-full overflow-hidden mb-2">
+                <div id="dash-usage-bar" class="bg-amber-200 h-full rounded-full transition-all duration-500" style="width: 99%"></div>
+              </div>
+              <div class="flex items-center justify-between text-xs sm:text-sm font-semibold text-white/95">
+                <span id="dash-usage-alert">⚠️ Ya usaste el 99% de lo que entró</span>
+                <span id="dash-saved-badge" class="text-xs bg-black/20 border border-amber-200/25 px-2.5 py-0.5 rounded-full">
+                  🐷 Ahorrado: $ 300.000
+                </span>
+              </div>
+            </div>
+
+            <!-- Dos sub-tarjetas abajo dentro del bloque dorado: Ingresos y Gastos -->
+            <div class="grid grid-cols-2 gap-3 relative z-10">
+              <div class="bg-black/20 backdrop-blur-xs border border-amber-200/25 rounded-2xl p-3.5 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-amber-200/20 flex items-center justify-center text-base shrink-0">
+                  ⬇️
+                </div>
+                <div class="min-w-0">
+                  <p class="text-xs text-amber-100/85 font-medium">Ingresos</p>
+                  <p id="dash-total-income" class="text-base sm:text-lg font-extrabold truncate">$ 1.500.000</p>
+                </div>
+              </div>
+
+              <div class="bg-black/20 backdrop-blur-xs border border-amber-200/25 rounded-2xl p-3.5 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-amber-200/20 flex items-center justify-center text-base shrink-0">
+                  ⬆️
+                </div>
+                <div class="min-w-0">
+                  <p class="text-xs text-amber-100/85 font-medium">Gastos</p>
+                  <p id="dash-total-expense" class="text-base sm:text-lg font-extrabold truncate">$ 1.184.000</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- COMPARATIVA CONTRA LA REGLA 50/30/20 -->
+          <div class="bg-[#FFFDF7] rounded-[20px] border border-amber-900/12 p-5 sm:p-6 shadow-card">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <div>
+                <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5">
+                  <span>📐</span>
+                  <span>Tu mes vs. Regla <span id="comp-ratio-label">50/30/20</span></span>
+                </h3>
+                <p class="text-xs text-slate-500 mt-0.5">Compará tus gastos reales con los topes ideales según tus ingresos</p>
+              </div>
+              <button
+                type="button"
+                onclick="switchView('calc')"
+                class="text-xs font-bold text-[#9A6712] hover:underline cursor-pointer"
+              >
+                Ajustar regla →
+              </button>
+            </div>
+
+            <div class="space-y-4">
+              <!-- Necesidades Real vs Tope -->
+              <div>
+                <div class="flex justify-between text-xs sm:text-sm mb-1.5">
+                  <span class="font-bold text-slate-800">🏠 Necesidades</span>
+                  <span class="text-slate-600 font-semibold">
+                    <strong id="comp-needs-actual" class="text-slate-900">$ 740.000</strong>
+                    <span class="text-slate-400"> / tope </span>
+                    <span id="comp-needs-target">$ 750.000</span>
+                  </span>
+                </div>
+                <div class="w-full bg-amber-100/80 h-2.5 rounded-full overflow-hidden">
+                  <div id="comp-needs-bar" class="bg-[#C68B24] h-full rounded-full transition-all duration-300" style="width: 98%"></div>
+                </div>
+              </div>
+
+              <!-- Gustos Real vs Tope -->
+              <div>
+                <div class="flex justify-between text-xs sm:text-sm mb-1.5">
+                  <span class="font-bold text-slate-800">🎉 Gustos</span>
+                  <span class="text-slate-600 font-semibold">
+                    <strong id="comp-wants-actual" class="text-slate-900">$ 444.000</strong>
+                    <span class="text-slate-400"> / tope </span>
+                    <span id="comp-wants-target">$ 450.000</span>
+                  </span>
+                </div>
+                <div class="w-full bg-amber-100/80 h-2.5 rounded-full overflow-hidden">
+                  <div id="comp-wants-bar" class="bg-[#EC4899] h-full rounded-full transition-all duration-300" style="width: 98%"></div>
+                </div>
+              </div>
+
+              <!-- Ahorro Real vs Meta -->
+              <div>
+                <div class="flex justify-between text-xs sm:text-sm mb-1.5">
+                  <span class="font-bold text-slate-800">🐷 Ahorro e inversión</span>
+                  <span class="text-slate-600 font-semibold">
+                    <strong id="comp-savings-actual" class="text-slate-900">$ 300.000</strong>
+                    <span class="text-slate-400"> / meta </span>
+                    <span id="comp-savings-target">$ 300.000</span>
+                  </span>
+                </div>
+                <div class="w-full bg-amber-100/80 h-2.5 rounded-full overflow-hidden">
+                  <div id="comp-savings-bar" class="bg-[#10B981] h-full rounded-full transition-all duration-300" style="width: 100%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TARJETA: TUS METAS 🎯 -->
+          <div class="bg-[#FFFDF7] rounded-[20px] border border-amber-900/12 p-5 sm:p-6 shadow-card">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-1.5">
+                <span>Tus metas</span>
+                <span>🎯</span>
+              </h3>
+              <button
+                type="button"
+                onclick="openNewGoalModal()"
+                class="text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-100/90 hover:bg-amber-200/70 text-[#8A5A0B] transition-colors cursor-pointer"
+              >
+                + Nueva meta
+              </button>
+            </div>
+
+            <div id="goals-list" class="space-y-3">
+              <!-- Metas renderizadas dinámicamente -->
+            </div>
+          </div>
+
+          <!-- HISTORIAL DE MOVIMIENTOS RECIENTES -->
+          <div class="bg-[#FFFDF7] rounded-[20px] border border-amber-900/12 p-5 sm:p-6 shadow-card">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <h3 class="text-base font-extrabold text-slate-900">Movimientos del mes</h3>
+              <div class="flex items-center gap-1 bg-[#FBF4E2] p-1 rounded-xl border border-amber-900/12">
+                <button type="button" onclick="setHistoryFilter('all')" id="filter-all" class="hist-filter px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-2xs cursor-pointer">Todos</button>
+                <button type="button" onclick="setHistoryFilter('expense')" id="filter-expense" class="hist-filter px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-900 cursor-pointer">Gastos</button>
+                <button type="button" onclick="setHistoryFilter('income')" id="filter-income" class="hist-filter px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-900 cursor-pointer">Ingresos</button>
+                <button type="button" onclick="setHistoryFilter('savings')" id="filter-savings" class="hist-filter px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-900 cursor-pointer">Ahorro</button>
+              </div>
+            </div>
+
+            <div id="transactions-list" class="divide-y divide-amber-900/10 max-h-[380px] overflow-y-auto pr-1">
+              <!-- Movimientos renderizados dinámicamente -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER SUTIL -->
+  <footer class="max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 text-center text-xs text-amber-950/55 flex items-center justify-center gap-2">
+    <svg class="w-4 h-4 shrink-0" aria-hidden="true">
+      <use href="#dag-coin-logo"></use>
+    </svg>
+    <span>Dag — Tu plata, tus metas 🚀 · Tus datos se guardan automáticamente en este navegador.</span>
+  </footer>
+
+  <!-- LÓGICA DE LA APLICACIÓN -->
+  <script>
+    /**
+     * Categorías exactas de Dag
+     * Mapeadas también a la regla 50/30/20 ('needs', 'wants', 'savings')
+     */
+    const CATEGORIES = {
+      expense: [
+        // Fila 1
+        { id: 'transporte', name: 'Transporte', icon: '🚗', bucket: 'needs' },
+        { id: 'delivery',   name: 'Delivery',   icon: '🛵', bucket: 'wants' },
+        { id: 'gym',        name: 'Gym',        icon: '🏋️', bucket: 'wants' },
+        // Fila 2
+        { id: 'peluqueria', name: 'Peluquería', icon: '💇', bucket: 'wants' },
+        { id: 'super',      name: 'Súper',      icon: '🛒', bucket: 'needs' },
+        { id: 'salidas',    name: 'Salidas',    icon: '🍻', bucket: 'wants' },
+        // Fila 3
+        { id: 'casa',       name: 'Casa',       icon: '🏠', bucket: 'needs' },
+        { id: 'cafecito',   name: 'Cafecito',   icon: '☕', bucket: 'wants' },
+        { id: 'auto',       name: 'Auto',       icon: '🚘', bucket: 'needs' },
+        // Fila 4
+        { id: 'impuestos',  name: 'Impuestos',  icon: '📄', bucket: 'needs' },
+        { id: 'comida',     name: 'Comida',     icon: '🍔', bucket: 'wants' },
+        { id: 'servicios',  name: 'Servicios',  icon: '💡', bucket: 'needs' },
+      ],
+      income: [
+        { id: 'sueldo',     name: 'Sueldo',     icon: '💼', bucket: 'income' },
+        { id: 'freelance',  name: 'Freelance',  icon: '💻', bucket: 'income' },
+        { id: 'ventas',     name: 'Ventas',     icon: '🏷️', bucket: 'income' },
+        { id: 'aguinaldo',  name: 'Extra/Bono', icon: '🎁', bucket: 'income' },
+        { id: 'alquileres', name: 'Cobros',     icon: '🏦', bucket: 'income' },
+        { id: 'otros_ing',  name: 'Otros',      icon: '✨', bucket: 'income' },
+      ],
+      savings: [
+        { id: 'dolares',    name: 'Dólares',    icon: '💵', bucket: 'savings' },
+        { id: 'plazofijo',  name: 'Plazo fijo', icon: '🏛️', bucket: 'savings' },
+        { id: 'fci',        name: 'FCI',        icon: '📈', bucket: 'savings' },
+        { id: 'emergencia', name: 'Reserva',    icon: '🛡️', bucket: 'savings' },
+        { id: 'viajes_ah',  name: 'Viajes',     icon: '✈️', bucket: 'savings' },
+        { id: 'meta_ah',    name: 'Mi Meta',    icon: '🎯', bucket: 'savings' },
+      ]
+    };
+
+    const BUCKET_LABELS = {
+      needs: 'Necesidades',
+      wants: 'Gustos',
+      savings: 'Ahorro e inversión',
+      income: 'Ingreso'
+    };
+
+    const MONTH_NAMES = [
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+
+    const STORAGE_KEY = 'dag_app_state_v1';
+
+    /**
+     * Estado inicial con el ejemplo exacto de $1.500.000 y $16.000 disponibles
+     */
+    function getDefaultExampleState() {
+      const defaultMonthKey = '2026-10'; // Noviembre de 2026 (0-indexed: 10)
+      return {
+        activeView: 'calc',
+        calcIncome: 1500000,
+        ratios: { needs: 50, wants: 30, savings: 20, presetId: '50-30-20' },
+        selectedMonth: defaultMonthKey,
+        dashCurrency: 'ARS',
+        historyFilter: 'all',
+        transactions: [
+          {
+            id: 'tx-1',
+            type: 'income',
+            amount: 1500000,
+            currency: 'ARS',
+            categoryId: 'sueldo',
+            note: 'Sueldo mensual',
+            month: defaultMonthKey,
+            date: '01/11/2026'
+          },
+          {
+            id: 'tx-2',
+            type: 'savings',
+            amount: 300000,
+            currency: 'ARS',
+            categoryId: 'dolares',
+            note: '20% separado apenas cobré',
+            month: defaultMonthKey,
+            date: '02/11/2026'
+          },
+          {
+            id: 'tx-3',
+            type: 'expense',
+            amount: 450000,
+            currency: 'ARS',
+            categoryId: 'casa',
+            note: 'Alquiler y expensas',
+            month: defaultMonthKey,
+            date: '04/11/2026'
+          },
+          {
+            id: 'tx-4',
+            type: 'expense',
+            amount: 210000,
+            currency: 'ARS',
+            categoryId: 'super',
+            note: 'Compra grande del mes',
+            month: defaultMonthKey,
+            date: '08/11/2026'
+          },
+          {
+            id: 'tx-5',
+            type: 'expense',
+            amount: 80000,
+            currency: 'ARS',
+            categoryId: 'servicios',
+            note: 'Luz, gas, internet y celular',
+            month: defaultMonthKey,
+            date: '12/11/2026'
+          },
+          {
+            id: 'tx-6',
+            type: 'expense',
+            amount: 260000,
+            currency: 'ARS',
+            categoryId: 'salidas',
+            note: 'Cenas y escapada de finde',
+            month: defaultMonthKey,
+            date: '15/11/2026'
+          },
+          {
+            id: 'tx-7',
+            type: 'expense',
+            amount: 184000,
+            currency: 'ARS',
+            categoryId: 'delivery',
+            note: 'Delivery y cafecitos',
+            month: defaultMonthKey,
+            date: '18/11/2026'
+          }
+        ],
+        goals: [
+          {
+            id: 'goal-1',
+            title: 'Fondo de emergencia (3 meses)',
+            icon: '🛡️',
+            current: 900000,
+            target: 2250000,
+            currency: 'ARS'
+          },
+          {
+            id: 'goal-2',
+            title: 'Vacaciones de verano',
+            icon: '✈️',
+            current: 450000,
+            target: 1200000,
+            currency: 'ARS'
+          }
+        ]
+      };
+    }
+
+    // Estado global en memoria + formulario actual
+    let appState = loadState();
+    let formState = {
+      type: 'expense',
+      amount: 0,
+      currency: 'ARS',
+      categoryId: 'super'
+    };
+
+    function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          return { ...getDefaultExampleState(), ...parsed };
+        }
+      } catch (e) {
+        console.error('Error leyendo localStorage:', e);
+      }
+      return getDefaultExampleState();
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        console.error('Error guardando en localStorage:', e);
+      }
+    }
+
+    // =========================================================
+    // UTILIDADES DE FORMATO Y NOTIFICACIONES
+    // =========================================================
+    function formatNumber(num) {
+      const clean = Math.round(Number(num) || 0);
+      const isNegative = clean < 0;
+      const formatted = Math.abs(clean).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      return isNegative ? `-${formatted}` : formatted;
+    }
+
+    function formatMoney(num, currency = 'ARS') {
+      const prefix = currency === 'USD' ? 'U$S ' : '$ ';
+      const val = Number(num) || 0;
+      if (val < 0) {
+        return `-${prefix}${formatNumber(Math.abs(val))}`;
+      }
+      return `${prefix}${formatNumber(val)}`;
+    }
+
+    function parseFormattedNumber(str) {
+      if (!str) return 0;
+      const digits = str.toString().replace(/\D/g, '');
+      return parseInt(digits, 10) || 0;
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const colors = {
+        success: 'bg-slate-900 text-white border-emerald-500/40',
+        info: 'bg-slate-900 text-white border-sky-500/40',
+        warning: 'bg-amber-900 text-white border-amber-400/40'
+      };
+      toast.className = `pointer-events-auto px-4 py-3 rounded-2xl border shadow-lg text-xs sm:text-sm font-semibold flex items-center gap-2 fade-in ${colors[type] || colors.info}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(6px)';
+        toast.style.transition = 'all 0.2s ease';
+        setTimeout(() => toast.remove(), 220);
+      }, 2800);
+    }
+
+    // =========================================================
+    // NAVEGACIÓN ENTRE VISTAS
+    // =========================================================
+    function switchView(viewName) {
+      appState.activeView = viewName;
+      saveState();
+
+      const calcSec = document.getElementById('view-calc');
+      const trackerSec = document.getElementById('view-tracker');
+      const btnCalc = document.getElementById('tab-btn-calc');
+      const btnTracker = document.getElementById('tab-btn-tracker');
+
+      if (viewName === 'calc') {
+        calcSec.classList.remove('hidden');
+        trackerSec.classList.add('hidden');
+        btnCalc.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-1.5 bg-white text-[#9A6712] shadow-xs cursor-pointer';
+        btnTracker.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-1.5 text-amber-950/75 hover:text-slate-900 cursor-pointer';
+        updateCalculatorUI();
+      } else {
+        calcSec.classList.add('hidden');
+        trackerSec.classList.remove('hidden');
+        btnTracker.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-1.5 bg-white text-[#9A6712] shadow-xs cursor-pointer';
+        btnCalc.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-1.5 text-amber-950/75 hover:text-slate-900 cursor-pointer';
+        renderTrackerDashboard();
+      }
+    }
+
+    // =========================================================
+    // VISTA 1: LÓGICA DE LA CALCULADORA 50/30/20
+    // =========================================================
+    function handleCalcIncomeInput(inputEl) {
+      const numericVal = parseFormattedNumber(inputEl.value);
+      inputEl.value = numericVal > 0 ? formatNumber(numericVal) : '';
+      appState.calcIncome = numericVal;
+      saveState();
+      updateCalculatorUI();
+    }
+
+    function getMonthlyTotals(monthKey, currency = 'ARS') {
+      const txs = appState.transactions.filter(
+        t => t.month === monthKey && t.currency === currency
+      );
+
+      let income = 0;
+      let expense = 0;
+      let savings = 0;
+      let needsExpense = 0;
+      let wantsExpense = 0;
+
+      txs.forEach(t => {
+        if (t.type === 'income') {
+          income += t.amount;
+        } else if (t.type === 'savings') {
+          savings += t.amount;
+        } else if (t.type === 'expense') {
+          expense += t.amount;
+          const cat = CATEGORIES.expense.find(c => c.id === t.categoryId);
+          if (cat && cat.bucket === 'wants') {
+            wantsExpense += t.amount;
+          } else {
+            needsExpense += t.amount;
+          }
+        }
+      });
+
+      const available = income - expense - savings;
+      const usedTotal = expense + savings;
+      const usedPct = income > 0 ? Math.round((usedTotal / income) * 100) : 0;
+
+      return {
+        income,
+        expense,
+        savings,
+        needsExpense,
+        wantsExpense,
+        available,
+        usedPct
+      };
+    }
+
+    function useMonthlyIncomeInCalc() {
+      const totals = getMonthlyTotals(appState.selectedMonth, 'ARS');
+      appState.calcIncome = totals.income;
+      saveState();
+      const inputEl = document.getElementById('calc-income-input');
+      inputEl.value = formatNumber(totals.income);
+      updateCalculatorUI();
+      showToast(`Ingreso mensual aplicado: ${formatMoney(totals.income)}`, 'info');
+    }
+
+    function selectRatioPreset(needs, wants, savings, presetId) {
+      appState.ratios = { needs, wants, savings, presetId };
+      saveState();
+
+      // Sincronizar inputs personalizados
+      document.getElementById('custom-needs').value = needs;
+      document.getElementById('custom-wants').value = wants;
+      document.getElementById('custom-savings').value = savings;
+      document.getElementById('custom-ratio-sum').textContent = `${needs + wants + savings}%`;
+
+      updateRatioButtonsVisual();
+      updateCalculatorUI();
+    }
+
+    function updateRatioButtonsVisual() {
+      const presets = ['50-30-20', '60-30-10', '70-20-10'];
+      presets.forEach(id => {
+        const btn = document.getElementById(`ratio-btn-${id}`);
+        if (!btn) return;
+        if (appState.ratios.presetId === id) {
+          btn.className = 'ratio-pill py-3 px-3 rounded-2xl font-bold text-sm sm:text-base transition-all cursor-pointer border-2 bg-[#FFF3E0] border-[#f69d5c] text-[#B45309] shadow-xs';
+        } else {
+          btn.className = 'ratio-pill py-3 px-3 rounded-2xl font-bold text-sm sm:text-base transition-all cursor-pointer border border-slate-200 bg-[#F7F9FC] text-slate-700 hover:bg-slate-100';
+        }
+      });
+    }
+
+    function toggleCustomRatioPanel() {
+      const panel = document.getElementById('custom-ratio-panel');
+      panel.classList.toggle('hidden');
+    }
+
+    function applyCustomRatios() {
+      const n = Math.max(0, Math.min(100, parseInt(document.getElementById('custom-needs').value, 10) || 0));
+      const w = Math.max(0, Math.min(100, parseInt(document.getElementById('custom-wants').value, 10) || 0));
+      const s = Math.max(0, Math.min(100, parseInt(document.getElementById('custom-savings').value, 10) || 0));
+      const sum = n + w + s;
+
+      const sumEl = document.getElementById('custom-ratio-sum');
+      sumEl.textContent = `${sum}%`;
+      sumEl.className = sum === 100 ? 'text-emerald-600 font-bold' : 'text-amber-600 font-bold';
+
+      appState.ratios = { needs: n, wants: w, savings: s, presetId: 'custom' };
+      saveState();
+      updateRatioButtonsVisual();
+      updateCalculatorUI();
+    }
+
+    function updateCalculatorUI() {
+      const income = appState.calcIncome || 0;
+      const { needs, wants, savings } = appState.ratios;
+
+      const needsAmt = Math.round(income * (needs / 100));
+      const wantsAmt = Math.round(income * (wants / 100));
+      const savingsAmt = Math.round(income * (savings / 100));
+
+      // Título y hint de ingreso real
+      document.getElementById('calc-title-ratio').textContent = `${needs}/${wants}/${savings}`;
+      const realTotals = getMonthlyTotals(appState.selectedMonth, 'ARS');
+      document.getElementById('calc-real-income-hint').textContent = formatMoney(realTotals.income, 'ARS');
+
+      // Filas principales
+      document.getElementById('amount-needs').textContent = formatMoney(needsAmt);
+      document.getElementById('pct-needs').textContent = `${needs}%`;
+      document.getElementById('bar-needs').style.width = `${Math.min(100, needs)}%`;
+
+      document.getElementById('amount-wants').textContent = formatMoney(wantsAmt);
+      document.getElementById('pct-wants').textContent = `${wants}%`;
+      document.getElementById('bar-wants').style.width = `${Math.min(100, wants)}%`;
+
+      document.getElementById('amount-savings').textContent = formatMoney(savingsAmt);
+      document.getElementById('pct-savings').textContent = `${savings}%`;
+      document.getElementById('bar-savings').style.width = `${Math.min(100, savings)}%`;
+
+      // Tarjetas inferiores "Las tres partes"
+      document.getElementById('card-pct-needs').textContent = `${needs}%`;
+      document.getElementById('card-amt-needs').textContent = formatMoney(needsAmt);
+
+      document.getElementById('card-pct-wants').textContent = `${wants}%`;
+      document.getElementById('card-amt-wants').textContent = formatMoney(wantsAmt);
+
+      document.getElementById('card-pct-savings').textContent = `${savings}%`;
+      document.getElementById('card-amt-savings').textContent = formatMoney(savingsAmt);
+    }
+
+    // =========================================================
+    // VISTA 2: FORMULARIO "NUEVO MOVIMIENTO"
+    // =========================================================
+    function selectTxType(type) {
+      formState.type = type;
+      const defaultCats = {
+        expense: 'super',
+        income: 'sueldo',
+        savings: 'dolares'
+      };
+      formState.categoryId = defaultCats[type];
+
+      const btnExp = document.getElementById('tx-type-expense');
+      const btnInc = document.getElementById('tx-type-income');
+      const btnSav = document.getElementById('tx-type-savings');
+
+      // Reset estilos
+      btnExp.className = 'tx-type-card p-3 rounded-2xl border border-amber-900/15 bg-white hover:bg-amber-50/60 flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer';
+      btnInc.className = 'tx-type-card p-3 rounded-2xl border border-amber-900/15 bg-white hover:bg-amber-50/60 flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer';
+      btnSav.className = 'tx-type-card p-3 rounded-2xl border border-amber-900/15 bg-white hover:bg-amber-50/60 flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer text-center';
+
+      if (type === 'expense') {
+        btnExp.className = 'tx-type-card p-3 rounded-2xl border-2 border-[#C68B24] bg-amber-50/90 flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs';
+      } else if (type === 'income') {
+        btnInc.className = 'tx-type-card p-3 rounded-2xl border-2 border-emerald-500 bg-emerald-50/80 flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs';
+      } else {
+        btnSav.className = 'tx-type-card p-3 rounded-2xl border-2 border-[#f69d5c] bg-[#FFF3E0]/90 flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer text-center shadow-2xs';
+      }
+
+      renderCategoryGrid();
+    }
+
+    function selectTxCurrency(curr) {
+      formState.currency = curr;
+      const btnArs = document.getElementById('tx-curr-ars');
+      const btnUsd = document.getElementById('tx-curr-usd');
+      const sym = document.getElementById('tx-currency-symbol');
+
+      if (curr === 'ARS') {
+        btnArs.className = 'py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-[#D49A2A] to-[#A46E12] text-white shadow-xs transition-all cursor-pointer';
+        btnUsd.className = 'py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-600 border border-amber-900/15 hover:bg-amber-50/60 transition-all cursor-pointer';
+        sym.textContent = '$';
+      } else {
+        btnUsd.className = 'py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm bg-gradient-to-r from-[#D49A2A] to-[#A46E12] text-white shadow-xs transition-all cursor-pointer';
+        btnArs.className = 'py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-600 border border-amber-900/15 hover:bg-amber-50/60 transition-all cursor-pointer';
+        sym.textContent = 'U$S';
+      }
+    }
+
+    function handleTxAmountInput(inputEl) {
+      const val = parseFormattedNumber(inputEl.value);
+      formState.amount = val;
+      inputEl.value = val > 0 ? formatNumber(val) : '';
+    }
+
+    function renderCategoryGrid() {
+      const grid = document.getElementById('category-grid');
+      const cats = CATEGORIES[formState.type] || CATEGORIES.expense;
+      grid.innerHTML = '';
+
+      cats.forEach(cat => {
+        const isSelected = cat.id === formState.categoryId;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = () => {
+          formState.categoryId = cat.id;
+          renderCategoryGrid();
+        };
+
+        btn.className = isSelected
+          ? 'p-2.5 rounded-2xl border-2 border-[#C68B24] bg-amber-50/90 flex flex-col items-center justify-center gap-1 transition-all cursor-pointer shadow-2xs'
+          : 'p-2.5 rounded-2xl border border-amber-900/12 bg-white hover:bg-amber-50/60 flex flex-col items-center justify-center gap-1 transition-all cursor-pointer';
+
+        btn.innerHTML = `
+          <span class="text-xl leading-none">${cat.icon}</span>
+          <span class="text-[11px] font-bold ${isSelected ? 'text-[#8A5A0B]' : 'text-slate-700'} truncate max-w-full">${cat.name}</span>
+        `;
+        grid.appendChild(btn);
+      });
+
+      // Actualizar badge informativo
+      const activeCat = cats.find(c => c.id === formState.categoryId) || cats[0];
+      const badge = document.getElementById('selected-category-badge');
+      if (activeCat) {
+        badge.textContent = `${activeCat.name} · ${BUCKET_LABELS[activeCat.bucket]}`;
+      }
+    }
+
+    function saveTransaction() {
+      if (!formState.amount || formState.amount <= 0) {
+        showToast('Ingresá un monto mayor a 0', 'warning');
+        document.getElementById('tx-amount-input').focus();
+        return;
+      }
+
+      const noteInput = document.getElementById('tx-note-input');
+      const cats = CATEGORIES[formState.type];
+      const cat = cats.find(c => c.id === formState.categoryId) || cats[0];
+
+      const [yearStr, monthIdxStr] = appState.selectedMonth.split('-');
+      const monthNum = String(parseInt(monthIdxStr, 10) + 1).padStart(2, '0');
+      const todayDay = String(new Date().getDate()).padStart(2, '0');
+
+      const newTx = {
+        id: 'tx-' + Date.now(),
+        type: formState.type,
+        amount: formState.amount,
+        currency: formState.currency,
+        categoryId: cat.id,
+        note: noteInput.value.trim() || cat.name,
+        month: appState.selectedMonth,
+        date: `${todayDay}/${monthNum}/${yearStr}`
+      };
+
+      appState.transactions.unshift(newTx);
+
+      // Sincronizar moneda del dashboard con el movimiento recién cargado
+      appState.dashCurrency = formState.currency;
+
+      saveState();
+
+      // Resetear formulario
+      formState.amount = 0;
+      document.getElementById('tx-amount-input').value = '';
+      noteInput.value = '';
+
+      renderTrackerDashboard();
+      updateCalculatorUI();
+      showToast(`✅ ${cat.icon} ${cat.name} (${formatMoney(newTx.amount, newTx.currency)}) guardado`, 'success');
+    }
+
+    function deleteTransaction(txId) {
+      appState.transactions = appState.transactions.filter(t => t.id !== txId);
+      saveState();
+      renderTrackerDashboard();
+      updateCalculatorUI();
+      showToast('Movimiento eliminado', 'info');
+    }
+
+    // =========================================================
+    // VISTA 2: DASHBOARD CELESTE, COMPARATIVA, METAS E HISTORIAL
+    // =========================================================
+    function selectDashCurrency(curr) {
+      appState.dashCurrency = curr;
+      saveState();
+      renderTrackerDashboard();
+    }
+
+    function changeMonth(delta) {
+      const [yearStr, monthIdxStr] = appState.selectedMonth.split('-');
+      let year = parseInt(yearStr, 10);
+      let monthIdx = parseInt(monthIdxStr, 10) + delta;
+
+      if (monthIdx < 0) {
+        monthIdx = 11;
+        year -= 1;
+      } else if (monthIdx > 11) {
+        monthIdx = 0;
+        year += 1;
+      }
+
+      appState.selectedMonth = `${year}-${String(monthIdx).padStart(2, '0')}`;
+      saveState();
+      renderTrackerDashboard();
+      updateCalculatorUI();
+    }
+
+    function setHistoryFilter(filter) {
+      appState.historyFilter = filter;
+      saveState();
+
+      document.querySelectorAll('.hist-filter').forEach(btn => {
+        btn.className = 'hist-filter px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-500 hover:text-slate-900 cursor-pointer';
+      });
+      const activeBtn = document.getElementById(`filter-${filter}`);
+      if (activeBtn) {
+        activeBtn.className = 'hist-filter px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-slate-900 shadow-2xs cursor-pointer';
+      }
+
+      renderTransactionsList();
+    }
+
+    function renderTrackerDashboard() {
+      const curr = appState.dashCurrency;
+      const [yearStr, monthIdxStr] = appState.selectedMonth.split('-');
+      const monthName = MONTH_NAMES[parseInt(monthIdxStr, 10)] || 'Noviembre';
+
+      // Etiqueta del mes
+      document.getElementById('dash-month-label').textContent = `${monthName} de ${yearStr}`;
+
+      // Tabs Pesos / Dólares del dashboard
+      const btnArs = document.getElementById('dash-curr-ars');
+      const btnUsd = document.getElementById('dash-curr-usd');
+      if (curr === 'ARS') {
+        btnArs.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-white text-[#8A5A0B] shadow-xs transition-all cursor-pointer';
+        btnUsd.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold text-amber-50/90 hover:text-white transition-all cursor-pointer';
+      } else {
+        btnUsd.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-white text-[#8A5A0B] shadow-xs transition-all cursor-pointer';
+        btnArs.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold text-amber-50/90 hover:text-white transition-all cursor-pointer';
+      }
+
+      // Cálculos del mes
+      const totals = getMonthlyTotals(appState.selectedMonth, curr);
+
+      document.getElementById('dash-available-amount').textContent = formatMoney(totals.available, curr);
+      document.getElementById('dash-total-income').textContent = formatMoney(totals.income, curr);
+      document.getElementById('dash-total-expense').textContent = formatMoney(totals.expense, curr);
+      document.getElementById('dash-saved-badge').textContent = `🐷 Ahorrado: ${formatMoney(totals.savings, curr)}`;
+
+      const barPct = Math.min(100, Math.max(0, totals.usedPct));
+      document.getElementById('dash-usage-bar').style.width = `${barPct}%`;
+
+      const alertEl = document.getElementById('dash-usage-alert');
+      if (totals.income === 0 && totals.expense === 0 && totals.savings === 0) {
+        alertEl.textContent = '✨ Registrá tu ingreso del mes para empezar';
+      } else if (totals.usedPct > 100) {
+        alertEl.textContent = `🚨 Te pasaste: usaste el ${totals.usedPct}% de lo que entró`;
+      } else if (totals.usedPct >= 85) {
+        alertEl.textContent = `⚠️ Ya usaste el ${totals.usedPct}% de lo que entró`;
+      } else {
+        alertEl.textContent = `✅ Llevás asignado el ${totals.usedPct}% de lo que entró`;
+      }
+
+      // Renderizar comparativa 50/30/20
+      renderComparisonPanel(totals, curr);
+
+      // Renderizar metas y lista de movimientos
+      renderGoalsList();
+      renderTransactionsList();
+    }
+
+    function renderComparisonPanel(totals, curr) {
+      const { needs, wants, savings } = appState.ratios;
+      document.getElementById('comp-ratio-label').textContent = `${needs}/${wants}/${savings}`;
+
+      // Base de ingresos: usa el ingreso real del mes en esa moneda, o el de la calculadora si aún no cargó ingresos en Pesos
+      const baseIncome = totals.income > 0 ? totals.income : (curr === 'ARS' ? appState.calcIncome : 0);
+
+      const targetNeeds = Math.round(baseIncome * (needs / 100));
+      const targetWants = Math.round(baseIncome * (wants / 100));
+      const targetSavings = Math.round(baseIncome * (savings / 100));
+
+      document.getElementById('comp-needs-actual').textContent = formatMoney(totals.needsExpense, curr);
+      document.getElementById('comp-needs-target').textContent = formatMoney(targetNeeds, curr);
+      const needsPct = targetNeeds > 0 ? Math.min(100, Math.round((totals.needsExpense / targetNeeds) * 100)) : 0;
+      const needsBar = document.getElementById('comp-needs-bar');
+      needsBar.style.width = `${needsPct}%`;
+      needsBar.className = totals.needsExpense > targetNeeds && targetNeeds > 0
+        ? 'bg-amber-600 h-full rounded-full transition-all duration-300'
+        : 'bg-[#C68B24] h-full rounded-full transition-all duration-300';
+
+      document.getElementById('comp-wants-actual').textContent = formatMoney(totals.wantsExpense, curr);
+      document.getElementById('comp-wants-target').textContent = formatMoney(targetWants, curr);
+      const wantsPct = targetWants > 0 ? Math.min(100, Math.round((totals.wantsExpense / targetWants) * 100)) : 0;
+      const wantsBar = document.getElementById('comp-wants-bar');
+      wantsBar.style.width = `${wantsPct}%`;
+      wantsBar.className = totals.wantsExpense > targetWants && targetWants > 0
+        ? 'bg-rose-600 h-full rounded-full transition-all duration-300'
+        : 'bg-[#EC4899] h-full rounded-full transition-all duration-300';
+
+      document.getElementById('comp-savings-actual').textContent = formatMoney(totals.savings, curr);
+      document.getElementById('comp-savings-target').textContent = formatMoney(targetSavings, curr);
+      const savingsPct = targetSavings > 0 ? Math.min(100, Math.round((totals.savings / targetSavings) * 100)) : 0;
+      document.getElementById('comp-savings-bar').style.width = `${savingsPct}%`;
+    }
+
+    function renderTransactionsList() {
+      const listEl = document.getElementById('transactions-list');
+      const curr = appState.dashCurrency;
+      const filter = appState.historyFilter;
+
+      const filtered = appState.transactions.filter(t => {
+        if (t.month !== appState.selectedMonth || t.currency !== curr) return false;
+        if (filter !== 'all' && t.type !== filter) return false;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `
+          <div class="py-8 text-center">
+            <p class="text-2xl mb-1.5">📭</p>
+            <p class="text-sm font-semibold text-slate-600">No hay movimientos en este filtro</p>
+            <p class="text-xs text-slate-400 mt-0.5">Cargá uno desde el panel de la izquierda</p>
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = filtered.map(tx => {
+        const catGroup = CATEGORIES[tx.type] || CATEGORIES.expense;
+        const cat = catGroup.find(c => c.id === tx.categoryId) || { icon: '💸', name: 'Movimiento', bucket: 'needs' };
+
+        let amountColor = 'text-slate-900';
+        let sign = '-';
+        let tagBadge = `<span class="text-[10px] font-semibold px-2 py-0.5 rounded-full ${cat.bucket === 'wants' ? 'bg-pink-50 text-[#EC4899]' : 'bg-amber-100/80 text-[#8A5A0B]'}">${BUCKET_LABELS[cat.bucket]}</span>`;
+
+        if (tx.type === 'income') {
+          amountColor = 'text-emerald-600';
+          sign = '+';
+          tagBadge = `<span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">Ingreso</span>`;
+        } else if (tx.type === 'savings') {
+          amountColor = 'text-[#10B981]';
+          sign = '🐷 ';
+          tagBadge = `<span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">Ahorro</span>`;
+        }
+
+        return `
+          <div class="py-3 flex items-center justify-between gap-3 group">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-10 h-10 rounded-2xl bg-[#FBF4E2] border border-amber-900/12 flex items-center justify-center text-lg shrink-0">
+                ${cat.icon}
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <p class="text-sm font-bold text-slate-900 truncate">${tx.note || cat.name}</p>
+                  ${tagBadge}
+                </div>
+                <p class="text-xs text-slate-400 mt-0.5">${cat.name} · ${tx.date}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2.5 shrink-0">
+              <span class="text-sm sm:text-base font-extrabold ${amountColor}">
+                ${sign}${formatMoney(tx.amount, tx.currency)}
+              </span>
+              <button
+                type="button"
+                onclick="deleteTransaction('${tx.id}')"
+                title="Eliminar movimiento"
+                class="w-7 h-7 rounded-lg text-slate-300 hover:text-rose-500 hover:bg-rose-50 flex items-center justify-center transition-colors cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================
+    // TUS METAS 🎯 (CREAR, APORTAR Y ELIMINAR)
+    // =========================================================
+    function renderGoalsList() {
+      const container = document.getElementById('goals-list');
+      if (!appState.goals || appState.goals.length === 0) {
+        container.innerHTML = `
+          <div class="p-4 rounded-2xl bg-[#F7F9FC] border border-dashed border-slate-200 text-center">
+            <p class="text-xs sm:text-sm text-slate-500">🎯 Creá una meta de ahorro para seguir tu avance.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = appState.goals.map(goal => {
+        const pct = goal.target > 0 ? Math.min(100, Math.round((goal.current / goal.target) * 100)) : 0;
+        return `
+          <div class="p-3.5 rounded-2xl bg-[#FBF4E2] border border-amber-900/12">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="text-lg">${goal.icon || '🎯'}</span>
+                <span class="text-sm font-bold text-slate-900 truncate">${goal.title}</span>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onclick="openAddToGoalModal('${goal.id}')"
+                  class="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white transition-colors cursor-pointer"
+                >
+                  + Aportar
+                </button>
+                <button
+                  type="button"
+                  onclick="deleteGoal('${goal.id}')"
+                  class="text-xs text-slate-400 hover:text-rose-500 px-1.5 py-1 cursor-pointer"
+                  title="Eliminar meta"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            <div class="w-full bg-amber-200/60 h-2 rounded-full overflow-hidden mb-1.5">
+              <div class="bg-[#10B981] h-full rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+            </div>
+
+            <div class="flex justify-between text-xs font-semibold text-slate-500">
+              <span>${formatMoney(goal.current, goal.currency)} <span class="text-slate-400">de ${formatMoney(goal.target, goal.currency)}</span></span>
+              <span class="text-[#10B981] font-bold">${pct}%</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openModal(htmlContent) {
+      const backdrop = document.getElementById('modal-backdrop');
+      const content = document.getElementById('modal-content');
+      content.innerHTML = htmlContent;
+      backdrop.classList.remove('hidden');
+      backdrop.classList.add('flex');
+    }
+
+    function closeModal() {
+      const backdrop = document.getElementById('modal-backdrop');
+      backdrop.classList.add('hidden');
+      backdrop.classList.remove('flex');
+    }
+
+    function openNewGoalModal() {
+      openModal(`
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-extrabold text-slate-900">🎯 Nueva meta de ahorro</h3>
+          <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 font-bold cursor-pointer">✕</button>
+        </div>
+        <div class="space-y-3.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nombre de la meta</label>
+            <input id="goal-title-input" type="text" placeholder="Ej. Comprar moto, Fondo de emergencia..." class="w-full px-3.5 py-2.5 rounded-xl border border-amber-900/20 bg-[#FBF4E2] text-sm font-medium focus:outline-none focus:border-[#C68B24]" />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Monto objetivo</label>
+              <input id="goal-target-input" type="text" inputmode="numeric" oninput="this.value = formatNumber(parseFormattedNumber(this.value))" placeholder="1.000.000" class="w-full px-3.5 py-2.5 rounded-xl border border-amber-900/20 bg-[#FBF4E2] text-sm font-bold focus:outline-none focus:border-[#C68B24]" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Ya tengo ahorrado</label>
+              <input id="goal-current-input" type="text" inputmode="numeric" oninput="this.value = formatNumber(parseFormattedNumber(this.value))" placeholder="0" class="w-full px-3.5 py-2.5 rounded-xl border border-amber-900/20 bg-[#FBF4E2] text-sm font-bold focus:outline-none focus:border-[#C68B24]" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Moneda</label>
+            <select id="goal-currency-input" class="w-full px-3.5 py-2.5 rounded-xl border border-amber-900/20 bg-[#FBF4E2] text-sm font-semibold focus:outline-none focus:border-[#C68B24]">
+              <option value="ARS">$ Pesos</option>
+              <option value="USD">U$S Dólares</option>
+            </select>
+          </div>
+          <div class="pt-2 flex justify-end gap-2">
+            <button onclick="closeModal()" class="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-amber-100/70 cursor-pointer">Cancelar</button>
+            <button onclick="createGoal()" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-[#D49A2A] to-[#A46E12] hover:brightness-105 text-white cursor-pointer">Crear meta</button>
+          </div>
+        </div>
+      `);
+    }
+
+    function createGoal() {
+      const title = document.getElementById('goal-title-input').value.trim();
+      const target = parseFormattedNumber(document.getElementById('goal-target-input').value);
+      const current = parseFormattedNumber(document.getElementById('goal-current-input').value);
+      const currency = document.getElementById('goal-currency-input').value;
+
+      if (!title || target <= 0) {
+        showToast('Completá el nombre y un monto objetivo mayor a 0', 'warning');
+        return;
+      }
+
+      appState.goals.push({
+        id: 'goal-' + Date.now(),
+        title,
+        icon: '🎯',
+        current,
+        target,
+        currency
+      });
+
+      saveState();
+      closeModal();
+      renderGoalsList();
+      showToast('🎯 Meta creada con éxito', 'success');
+    }
+
+    function openAddToGoalModal(goalId) {
+      const goal = appState.goals.find(g => g.id === goalId);
+      if (!goal) return;
+
+      openModal(`
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-extrabold text-slate-900">🐷 Sumar a "${goal.title}"</h3>
+          <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 font-bold cursor-pointer">✕</button>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">¿Cuánto querés sumar? (${goal.currency === 'USD' ? 'U$S' : '$'})</label>
+            <input id="goal-add-amount" type="text" inputmode="numeric" oninput="this.value = formatNumber(parseFormattedNumber(this.value))" placeholder="100.000" class="w-full px-4 py-3 rounded-xl border-2 border-[#10B981] bg-[#FBF4E2] text-xl font-extrabold focus:outline-none" />
+          </div>
+          <div class="flex justify-end gap-2">
+            <button onclick="closeModal()" class="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-amber-100/70 cursor-pointer">Cancelar</button>
+            <button onclick="confirmAddToGoal('${goal.id}')" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#10B981] hover:bg-emerald-600 text-white cursor-pointer">Sumar aporte</button>
+          </div>
+        </div>
+      `);
+    }
+
+    function confirmAddToGoal(goalId) {
+      const addAmt = parseFormattedNumber(document.getElementById('goal-add-amount').value);
+      if (addAmt <= 0) {
+        showToast('Ingresá un monto válido', 'warning');
+        return;
+      }
+      const goal = appState.goals.find(g => g.id === goalId);
+      if (goal) {
+        goal.current += addAmt;
+        saveState();
+        renderGoalsList();
+        showToast(`🐷 Sumaste ${formatMoney(addAmt, goal.currency)} a tu meta`, 'success');
+      }
+      closeModal();
+    }
+
+    function deleteGoal(goalId) {
+      appState.goals = appState.goals.filter(g => g.id !== goalId);
+      saveState();
+      renderGoalsList();
+      showToast('Meta eliminada', 'info');
+    }
+
+    // =========================================================
+    // CARGAR EJEMPLO ($1.500.000) O REINICIAR DE CERO
+    // =========================================================
+    function loadExampleData() {
+      const currentView = appState.activeView;
+      appState = getDefaultExampleState();
+      appState.activeView = currentView;
+      saveState();
+
+      document.getElementById('calc-income-input').value = formatNumber(appState.calcIncome);
+      updateRatioButtonsVisual();
+      updateCalculatorUI();
+      renderTrackerDashboard();
+      showToast('✨ Ejemplo de $1.500.000 cargado', 'success');
+    }
+
+    function openResetModal() {
+      openModal(`
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-extrabold text-slate-900">Reiniciar desde cero</h3>
+          <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 font-bold cursor-pointer">✕</button>
+        </div>
+        <p class="text-sm text-slate-600 mb-5">
+          ¿Querés borrar todos los movimientos y metas guardadas para empezar con tus propios números desde $0?
+        </p>
+        <div class="flex justify-end gap-2">
+          <button onclick="closeModal()" class="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-amber-100/70 cursor-pointer">Cancelar</button>
+          <button onclick="confirmResetAll()" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white cursor-pointer">Sí, empezar en $0</button>
+        </div>
+      `);
+    }
+
+    function confirmResetAll() {
+      const now = new Date();
+      const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth()).padStart(2, '0')}`;
+      const currentView = appState.activeView;
+
+      appState = {
+        activeView: currentView,
+        calcIncome: 0,
+        ratios: { needs: 50, wants: 30, savings: 20, presetId: '50-30-20' },
+        selectedMonth: currentMonthKey,
+        dashCurrency: 'ARS',
+        historyFilter: 'all',
+        transactions: [],
+        goals: []
+      };
+
+      saveState();
+      closeModal();
+
+      document.getElementById('calc-income-input').value = '';
+      updateRatioButtonsVisual();
+      updateCalculatorUI();
+      renderTrackerDashboard();
+      showToast('Todo reiniciado en $0', 'info');
+    }
+
+    // Cerrar modal al hacer click fuera
+    document.getElementById('modal-backdrop').addEventListener('click', (e) => {
+      if (e.target.id === 'modal-backdrop') closeModal();
+    });
+
+    // =========================================================
+    // INICIALIZACIÓN AL CARGAR LA PÁGINA
+    // =========================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      // Cargar valor inicial en calculadora
+      const calcInput = document.getElementById('calc-income-input');
+      calcInput.value = appState.calcIncome > 0 ? formatNumber(appState.calcIncome) : '';
+
+      // Inicializar grilla de categorías y botones
+      renderCategoryGrid();
+      updateRatioButtonsVisual();
+      updateCalculatorUI();
+      renderTrackerDashboard();
+
+      // Activar pestaña guardada
+      switchView(appState.activeView || 'calc');
+    });
+  </script>
+</body>
+</html>
